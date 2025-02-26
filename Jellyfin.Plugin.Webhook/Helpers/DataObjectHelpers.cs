@@ -117,14 +117,6 @@ public static class DataObjectHelpers
                     dataObject["SeasonNumber000"] = season.IndexNumber.Value.ToString("000", CultureInfo.InvariantCulture);
                 }
 
-                if (season.Series?.ProviderIds is not null)
-                {
-                    foreach (var (providerKey, providerValue) in season.Series.ProviderIds)
-                    {
-                        dataObject[$"SeriesProvider_{providerKey.ToLowerInvariant()}"] = providerValue;
-                    }
-                }
-
                 break;
             case Episode episode:
                 if (!string.IsNullOrEmpty(episode.Series?.Name))
@@ -186,6 +178,14 @@ public static class DataObjectHelpers
                     }
                 }
 
+                if (episode.Series?.ExternalUrls is not null)
+                {
+                    foreach (var externalUrl in episode.Series.ExternalUrls)
+                    {
+                        dataObject[$"SeriesExternalUrl_{externalUrl.Name.ToLowerInvariant()}"] = externalUrl.Url;
+                    }
+                }
+
                 break;
             case Audio audio:
                 if (!string.IsNullOrEmpty(audio.Album))
@@ -219,6 +219,11 @@ public static class DataObjectHelpers
                 }
 
                 break;
+        }
+
+        foreach (var externalUrl in item.ExternalUrls)
+        {
+            dataObject[$"ExternalUrl_{externalUrl.Name.ToLowerInvariant()}"] = externalUrl.Url;
         }
 
         foreach (var (providerKey, providerValue) in item.ProviderIds)
