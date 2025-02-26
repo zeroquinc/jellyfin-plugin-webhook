@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using HandlebarsDotNet;
@@ -63,9 +63,29 @@ public abstract class BaseOption
     public bool EnableSongs { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to notify on videos.
+    /// </summary>
+    public bool EnableVideos { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to send all possible properties.
     /// </summary>
     public bool SendAllProperties { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to trim the message body before sending.
+    /// </summary>
+    public bool TrimWhitespace { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to skip sending an empty message body.
+    /// </summary>
+    public bool SkipEmptyMessageBody { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to Enable or Disable Webhook.
+    /// </summary>
+    public bool EnableWebhook { get; set; } = true;
 
     /// <summary>
     /// Gets or sets the handlebars template.
@@ -93,8 +113,10 @@ public abstract class BaseOption
     /// <returns>The string message body.</returns>
     public string GetMessageBody(Dictionary<string, object> data)
     {
-        return SendAllProperties
+        var body = SendAllProperties
             ? JsonSerializer.Serialize(data, JsonDefaults.Options)
             : GetCompiledTemplate()(data);
+
+        return TrimWhitespace ? body.Trim() : body;
     }
 }
