@@ -117,11 +117,11 @@ public static class DataObjectHelpers
                     dataObject["SeasonNumber000"] = season.IndexNumber.Value.ToString("000", CultureInfo.InvariantCulture);
                 }
 
-                if (season.Series != null)
+                if (season.Series?.ProviderIds is not null)
                 {
                     foreach (var (providerKey, providerValue) in season.Series.ProviderIds)
                     {
-                        dataObject[$"Provider_{providerKey.ToLowerInvariant()}_Show"] = providerValue;
+                        dataObject[$"SeriesProvider_{providerKey.ToLowerInvariant()}"] = providerValue;
                     }
                 }
 
@@ -178,11 +178,11 @@ public static class DataObjectHelpers
                     dataObject["AirTime"] = episode.Series.AirTime;
                 }
 
-                if (episode.Series != null)
+                if (episode.Series?.ProviderIds is not null)
                 {
                     foreach (var (providerKey, providerValue) in episode.Series.ProviderIds)
                     {
-                        dataObject[$"Provider_{providerKey.ToLowerInvariant()}_Show"] = providerValue;
+                        dataObject[$"SeriesProvider_{providerKey.ToLowerInvariant()}"] = providerValue;
                     }
                 }
 
